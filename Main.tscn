@@ -1,0 +1,116 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://tiles.tres" type="TileSet" id=1]
+[ext_resource path="res://Main.gd" type="Script" id=2]
+[ext_resource path="res://cells.png" type="Texture" id=3]
+[ext_resource path="res://theme.tres" type="Theme" id=4]
+[ext_resource path="res://box_set.tres" type="TileSet" id=5]
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 3 )
+region = Rect2( 5, 12, 4, 4 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 3 )
+region = Rect2( 10, 0, 6, 6 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 3 )
+region = Rect2( 22, 0, 4, 4 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 3 )
+region = Rect2( 17, 0, 4, 4 )
+
+[node name="Main" type="Control"]
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = ExtResource( 1 )
+cell_size = Vector2( 6, 6 )
+format = 1
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="VB" type="VBoxContainer" parent="CanvasLayer"]
+margin_right = 17.0
+margin_bottom = 73.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Settings" type="Button" parent="CanvasLayer/VB"]
+margin_right = 17.0
+margin_bottom = 14.0
+rect_pivot_offset = Vector2( -93.9456, 13.3492 )
+size_flags_horizontal = 3
+theme = ExtResource( 4 )
+toggle_mode = true
+icon = SubResource( 6 )
+flat = true
+expand_icon = true
+
+[node name="Wall" type="Button" parent="CanvasLayer/VB"]
+margin_top = 18.0
+margin_right = 17.0
+margin_bottom = 32.0
+rect_pivot_offset = Vector2( -93.9456, 13.3492 )
+size_flags_horizontal = 3
+theme = ExtResource( 4 )
+toggle_mode = true
+icon = SubResource( 4 )
+flat = true
+expand_icon = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Box" type="Button" parent="CanvasLayer/VB"]
+margin_top = 36.0
+margin_right = 17.0
+margin_bottom = 50.0
+rect_pivot_offset = Vector2( -93.9456, 13.3492 )
+size_flags_horizontal = 3
+theme = ExtResource( 4 )
+toggle_mode = true
+pressed = true
+icon = SubResource( 5 )
+flat = true
+expand_icon = true
+
+[node name="Player" type="Button" parent="CanvasLayer/VB"]
+margin_top = 54.0
+margin_right = 17.0
+margin_bottom = 68.0
+rect_pivot_offset = Vector2( -93.9456, 13.3492 )
+size_flags_horizontal = 3
+theme = ExtResource( 4 )
+toggle_mode = true
+pressed = true
+icon = SubResource( 3 )
+flat = true
+expand_icon = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="WallMap" type="TileMap" parent="."]
+tile_set = ExtResource( 5 )
+cell_size = Vector2( 6, 6 )
+centered_textures = true
+format = 1
+
+[connection signal="toggled" from="CanvasLayer/VB/Settings" to="." method="_on_Settings_toggled"]
+[connection signal="toggled" from="CanvasLayer/VB/Wall" to="." method="_on_Wall_toggled"]
+[connection signal="toggled" from="CanvasLayer/VB/Box" to="." method="_on_Box_toggled"]
+[connection signal="toggled" from="CanvasLayer/VB/Player" to="." method="_on_Player_toggled"]
