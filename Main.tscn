@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://tiles.tres" type="TileSet" id=1]
 [ext_resource path="res://Main.gd" type="Script" id=2]
 [ext_resource path="res://cells.png" type="Texture" id=3]
 [ext_resource path="res://theme.tres" type="Theme" id=4]
 [ext_resource path="res://box_set.tres" type="TileSet" id=5]
+[ext_resource path="res://grabber.tres" type="Texture" id=6]
 
 [sub_resource type="StyleBoxEmpty" id=5]
 
@@ -23,6 +24,8 @@ region = Rect2( 22, 0, 4, 4 )
 [sub_resource type="AtlasTexture" id=4]
 atlas = ExtResource( 3 )
 region = Rect2( 17, 0, 4, 4 )
+
+[sub_resource type="StyleBoxEmpty" id=6]
 
 [node name="Main" type="Control"]
 script = ExtResource( 2 )
@@ -116,6 +119,11 @@ __meta__ = {
 margin_top = 72.0
 margin_right = 16.0
 margin_bottom = 132.0
+custom_icons/tick = ExtResource( 6 )
+custom_icons/grabber_disabled = ExtResource( 6 )
+custom_icons/grabber_highlight = ExtResource( 6 )
+custom_icons/grabber = ExtResource( 6 )
+custom_styles/grabber_area_highlight = SubResource( 6 )
 min_value = 0.2
 max_value = 2.0
 step = 0.2
