@@ -40,6 +40,8 @@ func _unhandled_input(event):
 			else:
 				mode = $WallMap.get_cell(ps.x,ps.y) == -1
 			draw_cell(ps)
+	elif event is InputEventScreenTouch and !event.pressed:
+		events.erase(event.index)
 	elif event is InputEventScreenDrag:
 		if events.size() == 1:
 			if _is_none():
