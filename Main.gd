@@ -41,8 +41,9 @@ func _unhandled_input(event: InputEvent) -> void:
 				mode = $WallMap.get_cell(ps.x,ps.y) == -1
 			draw_cell(ps)
 	elif event is InputEventScreenTouch and !event.pressed:
-		events.clear()
+		events.erase(event.index)
 	elif event is InputEventScreenDrag:
+		events[event.index] = event
 		if events.size() == 1:
 			if _is_none():
 				$Camera2D.position += (_previousPosition - event.position)*$Camera2D.zoom
