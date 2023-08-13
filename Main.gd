@@ -30,7 +30,7 @@ func _unhandled_input(event):
 		$Camera2D.zoom /= 1.1
 	elif event is InputEventMouseButton and event.button_index == BUTTON_WHEEL_DOWN:
 		$Camera2D.zoom *= 1.1
-	elif(event is InputEventScreenTouch and event.pressed):
+	elif event is InputEventScreenTouch and event.pressed:
 		_previousPosition = event.position
 		events[event.index] = event
 		if type != cell.NONE:
@@ -41,7 +41,7 @@ func _unhandled_input(event):
 				mode = $WallMap.get_cell(ps.x,ps.y) == -1
 			draw_cell(ps)
 	elif event is InputEventScreenTouch and !event.pressed:
-		events.erase(event.index)
+		events.clear()
 	elif event is InputEventScreenDrag:
 		if events.size() == 1:
 			if _is_none():
@@ -58,7 +58,7 @@ func _unhandled_input(event):
 			last_drag_distance = drag_distance
 
 func _make_ps():
-	return ((get_global_mouse_position()- Vector2(3,3))/6).round()
+	return ((get_global_mouse_position() - Vector2(3,3))/6).round()
 
 func draw_cell(ps):
 	if type == cell.WALL:
@@ -69,7 +69,7 @@ func draw_cell(ps):
 		$WallMap.set_cell(ps.x, ps.y, 0 if mode else -1)
 
 func _clamp_zoom(new_zoom):
-	new_zoom = clamp($Camera2D.zoom.x * new_zoom, min_zoom, max_zoom)
+	new_zoom = $Camera2D.zoom.x * new_zoom# clamp($Camera2D.zoom.x * new_zoom, min_zoom, max_zoom)
 	$Camera2D.zoom = Vector2.ONE * new_zoom
 
 func _is_none() -> bool:
