@@ -114,7 +114,5 @@ func _on_Player_toggled(button_pressed: bool) -> void:
 		_change_sprite($CanvasLayer/P/VB/Player.icon, button_pressed, cell.PLAYER)
 		processing = false
 
-
 func _on_VSlider_value_changed(value: float) -> void:
 	$Camera2D.zoom = Vector2(value, value)
-	pass # Replace with function body.
