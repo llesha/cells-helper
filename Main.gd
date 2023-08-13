@@ -13,12 +13,11 @@ onready var buttons = [\
 	[$CanvasLayer/VB/Player, cell.PLAYER]]
 
 var type = cell.WALL
-var _moveCamera: bool = false
 var processing = false
 var mode = false
 
-var min_zoom = 0.3
-var max_zoom = 2.75
+var min_zoom = 0.1
+var max_zoom = 5
 var zoom_sensitivity = 10
 var zoom_speed = 0.05
 
@@ -32,7 +31,6 @@ func _unhandled_input(event):
 	elif event is InputEventMouseButton and event.button_index == BUTTON_WHEEL_DOWN:
 		$Camera2D.zoom *= 1.1
 	elif(event is InputEventScreenTouch and event.pressed):
-		_moveCamera = true
 		_previousPosition = event.position
 		events[event.index] = event
 		if type != cell.NONE:
@@ -44,18 +42,18 @@ func _unhandled_input(event):
 			draw_cell(ps)
 	elif event is InputEventScreenDrag:
 		if events.size() == 1:
-			if _moveCamera and _is_none():
+			if _is_none():
 				$Camera2D.position += (_previousPosition - event.position)*$Camera2D.zoom
 				_previousPosition = event.position
-			else:	
+			else:
 				var ps = _make_ps()
 				draw_cell(ps)
 		elif events.size() == 2:
 			var drag_distance = events[0].position.distance_to(events[1].position)
-			if abs(drag_distance - last_drag_distance) > zoom_sensitivity:
-				var new_zoom = (1 + zoom_speed) if drag_distance < last_drag_distance else (1 - zoom_speed)
-				_clamp_zoom(new_zoom)
-				last_drag_distance = drag_distance
+			#if abs(drag_distance - last_drag_distance) > zoom_sensitivity:
+			var new_zoom = (1 + zoom_speed) if drag_distance < last_drag_distance else (1 - zoom_speed)
+			_clamp_zoom(new_zoom)
+			last_drag_distance = drag_distance
 
 func _make_ps():
 	return ((get_global_mouse_position()- Vector2(3,3))/6).round()
