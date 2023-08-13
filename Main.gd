@@ -25,7 +25,7 @@ var _previousPosition: Vector2 = Vector2(0, 0)
 var events = {}
 var last_drag_distance = 0
 
-func _unhandled_input(event):
+func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == BUTTON_WHEEL_UP:
 		$Camera2D.zoom /= 1.1
 	elif event is InputEventMouseButton and event.button_index == BUTTON_WHEEL_DOWN:
