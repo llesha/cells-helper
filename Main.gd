@@ -8,9 +8,9 @@ enum cell {
 }
 
 onready var buttons = [\
-	[$CanvasLayer/VB/Wall, cell.WALL],
-	[$CanvasLayer/VB/Box, cell.BOX], \
-	[$CanvasLayer/VB/Player, cell.PLAYER]]
+	[$CanvasLayer/P/VB/Wall, cell.WALL],
+	[$CanvasLayer/P/VB/Box, cell.BOX], \
+	[$CanvasLayer/P/VB/Player, cell.PLAYER]]
 
 var type = cell.WALL
 var processing = false
@@ -22,8 +22,6 @@ var zoom_sensitivity = 10
 var zoom_speed = 0.05
 
 var _previousPosition: Vector2 = Vector2(0, 0)
-var events = {}
-var last_drag_distance = 0
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == BUTTON_WHEEL_UP:
@@ -32,7 +30,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		$Camera2D.zoom *= 1.1
 	elif event is InputEventScreenTouch and event.pressed:
 		_previousPosition = event.position
-		events[event.index] = event
 		if type != cell.NONE:
 			var ps = _make_ps()
 			if type == cell.WALL:
@@ -40,23 +37,13 @@ func _unhandled_input(event: InputEvent) -> void:
 			else:
 				mode = $WallMap.get_cell(ps.x,ps.y) == -1
 			draw_cell(ps)
-	elif event is InputEventScreenTouch and !event.pressed:
-		events.erase(event.index)
 	elif event is InputEventScreenDrag:
-		events[event.index] = event
-		if events.size() == 1:
-			if _is_none():
-				$Camera2D.position += (_previousPosition - event.position)*$Camera2D.zoom
-				_previousPosition = event.position
-			else:
-				var ps = _make_ps()
-				draw_cell(ps)
-		elif events.size() == 2:
-			var drag_distance = events[0].position.distance_to(events[1].position)
-			#if abs(drag_distance - last_drag_distance) > zoom_sensitivity:
-			var new_zoom = (1 + zoom_speed) if drag_distance < last_drag_distance else (1 - zoom_speed)
-			_clamp_zoom(new_zoom)
-			last_drag_distance = drag_distance
+		if _is_none():
+			$Camera2D.position += (_previousPosition - event.position)*$Camera2D.zoom
+			_previousPosition = event.position
+		else:
+			var ps = _make_ps()
+			draw_cell(ps)
 
 func _make_ps():
 	return ((get_global_mouse_position() - Vector2(3,3))/6).round()
@@ -68,10 +55,6 @@ func draw_cell(ps):
 		$WallMap.set_cell(ps.x, ps.y, 1 if mode else -1)
 	elif type == cell.PLAYER:
 		$WallMap.set_cell(ps.x, ps.y, 0 if mode else -1)
-
-func _clamp_zoom(new_zoom):
-	new_zoom = $Camera2D.zoom.x * new_zoom# clamp($Camera2D.zoom.x * new_zoom, min_zoom, max_zoom)
-	$Camera2D.zoom = Vector2.ONE * new_zoom
 
 func _is_none() -> bool:
 	return type == cell.NONE
@@ -116,18 +99,22 @@ func _change_sprite(sprite: AtlasTexture, is_pressed: bool, new_type: int):
 func _on_Wall_toggled(button_pressed: bool) -> void:
 	if !processing:
 		processing = true
-		_change_sprite($CanvasLayer/VB/Wall.icon, button_pressed, cell.WALL)
+		_change_sprite($CanvasLayer/P/VB/Wall.icon, button_pressed, cell.WALL)
 		processing = false
-
 
 func _on_Box_toggled(button_pressed: bool) -> void:
 	if !processing:
 		processing = true
-		_change_sprite($CanvasLayer/VB/Box.icon, button_pressed, cell.BOX)
+		_change_sprite($CanvasLayer/P/VB/Box.icon, button_pressed, cell.BOX)
 		processing = false
 
 func _on_Player_toggled(button_pressed: bool) -> void:
 	if !processing:
 		processing = true
-		_change_sprite($CanvasLayer/VB/Player.icon, button_pressed, cell.PLAYER)
+		_change_sprite($CanvasLayer/P/VB/Player.icon, button_pressed, cell.PLAYER)
 		processing = false
+
+
+func _on_VSlider_value_changed(value: float) -> void:
+	$Camera2D.zoom = Vector2(value, value)
+	pass # Replace with function body.
